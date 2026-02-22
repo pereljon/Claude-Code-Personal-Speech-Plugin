@@ -4,8 +4,7 @@ A Claude Code plugin that speaks responses aloud using macOS AVSpeechSynthesizer
 
 ## Requirements
 
-- macOS (uses AVSpeechSynthesizer)
-- Xcode Command Line Tools (`xcode-select --install`)
+- macOS on Apple Silicon (arm64)
 - `jq` (`brew install jq`)
 
 ## Install
@@ -15,10 +14,7 @@ A Claude Code plugin that speaks responses aloud using macOS AVSpeechSynthesizer
 git clone https://github.com/pereljon/Claude-Code-Personal-Speech-Plugin.git
 cd Claude-Code-Personal-Speech-Plugin
 
-# 2. Compile the Swift binary
-./install.sh
-
-# 3. Add the Stop hook to your Claude Code settings
+# 2. Add the Stop hook to your Claude Code settings
 ```
 
 Add the following to `~/.claude/settings.json` (create the file if it doesn't exist):
@@ -92,6 +88,16 @@ If Personal Voice isn't available, it falls back to the `fallbackVoice` setting.
 ```bash
 say -v '?'
 ```
+
+## Development
+
+To recompile the Swift binary from source:
+
+```bash
+./install.sh
+```
+
+Requires Xcode Command Line Tools (`xcode-select --install`).
 
 ## Uninstall
 
