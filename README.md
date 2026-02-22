@@ -93,7 +93,7 @@ say -v '?'
 To recompile the Swift binary from source:
 
 ```bash
-./install.sh
+./build.sh
 ```
 
 Requires Xcode Command Line Tools (`xcode-select --install`).

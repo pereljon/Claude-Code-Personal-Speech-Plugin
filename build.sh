@@ -1,6 +1,6 @@
 #!/bin/bash
-# Claude Personal Speech — Install Script
-# Compiles the Swift speech binary into a macOS app bundle.
+# Claude Personal Speech — Build Script
+# Recompiles the Swift speech binary into a macOS app bundle.
 
 set -e
 
@@ -10,19 +10,13 @@ CONTENTS_DIR="$APP_DIR/Contents"
 MACOS_DIR="$CONTENTS_DIR/MacOS"
 SOURCE="$PLUGIN_ROOT/scripts/speak-personal.swift"
 
-echo "Claude Personal Speech — Installing..."
+echo "Claude Personal Speech — Building..."
 
 # Check for swiftc
 if ! command -v swiftc &> /dev/null; then
     echo "Error: swiftc not found. Install Xcode or Xcode Command Line Tools:"
     echo "  xcode-select --install"
     exit 1
-fi
-
-# Check for jq (needed by hook scripts)
-if ! command -v jq &> /dev/null; then
-    echo "Warning: jq not found. Install it for the plugin to work:"
-    echo "  brew install jq"
 fi
 
 # Create app bundle structure
@@ -62,9 +56,4 @@ chmod +x "$MACOS_DIR/speak-personal"
 echo ""
 echo "Done! SpeakPersonal.app built at:"
 echo "  $APP_DIR"
-echo ""
-echo "To use the plugin:"
-echo "  claude plugin install $PLUGIN_ROOT"
-echo ""
-echo "Or test with:"
-echo "  claude --plugin-dir $PLUGIN_ROOT"
+echo "Done!"
