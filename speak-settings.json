@@ -1,0 +1,8 @@
+{
+  "rate": 0.58,
+  "pitch": 0.9,
+  "volume": 1.0,
+  "voice": "personal",
+  "fallbackVoice": "Samantha",
+  "maxChars": 500
+}

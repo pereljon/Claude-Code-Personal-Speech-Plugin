@@ -1,0 +1,9 @@
+{
+  "name": "claude-personal-speech",
+  "version": "1.0.0",
+  "description": "Claude Code Personal Speech Plugin — speaks responses aloud using macOS AVSpeechSynthesizer with Personal Voice support",
+  "author": {
+    "name": "Jonathan"
+  },
+  "keywords": ["tts", "speech", "personal-voice", "macos"]
+}
