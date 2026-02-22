@@ -1,65 +1,27 @@
 # Claude Code Personal Speech Plugin
 
-A Claude Code plugin that speaks responses aloud using macOS AVSpeechSynthesizer with Personal Voice support.
+Speaks Claude Code responses aloud using macOS AVSpeechSynthesizer with Personal Voice support.
 
 ## Requirements
 
 - macOS on Apple Silicon (arm64)
+- Claude Code
 
 ## Install
 
 ```bash
-# 1. Clone the repo
-git clone https://github.com/pereljon/Claude-Code-Personal-Speech-Plugin.git
-cd Claude-Code-Personal-Speech-Plugin
+# 1. Register the marketplace (one time)
+claude plugin marketplace add pereljon/Claude-Code-Personal-Speech-Plugin
 
-# 2. Add the Stop hook to your Claude Code settings
+# 2. Install the plugin
+claude plugin install claude-personal-speech
 ```
 
-Add the following to `~/.claude/settings.json` (create the file if it doesn't exist):
-
-```json
-{
-  "hooks": {
-    "Stop": [
-      {
-        "hooks": [
-          {
-            "type": "command",
-            "command": "/FULL/PATH/TO/Claude-Code-Personal-Speech-Plugin/scripts/speak.sh"
-          }
-        ]
-      }
-    ]
-  }
-}
-```
-
-Replace `/FULL/PATH/TO/` with the actual path where you cloned the repo.
-
-If you already have hooks in your settings, add the Stop entry to your existing `"Stop"` array.
-
-## How it works
-
-1. A **Stop hook** fires after every Claude response
-2. The hook extracts the response text, strips markdown, and truncates to `maxChars`
-3. Speech launches in a **detached process** (via `osascript`) so it doesn't block Claude
-4. New responses automatically interrupt any still-playing speech
+On first response, macOS may prompt for Personal Voice authorization.
 
 ## Settings
 
-Edit `speak-settings.json` to customize:
-
-```json
-{
-  "rate": 0.58,
-  "pitch": 0.9,
-  "volume": 1.0,
-  "voice": "personal",
-  "fallbackVoice": "Samantha",
-  "maxChars": 500
-}
-```
+Edit `speak-settings.json` in the plugin directory to customize:
 
 | Setting | Description | Default |
 |---------|-------------|---------|
@@ -72,32 +34,24 @@ Edit `speak-settings.json` to customize:
 
 Changes take effect on the next response — no recompile needed.
 
+To list available voices: `say -v '?'`
+
 ## Personal Voice
 
-To use Personal Voice:
-
 1. Set up a Personal Voice in **System Settings > Accessibility > Personal Voice**
-2. On first use, macOS will prompt for permission to access your Personal Voice
-3. Set `"voice": "personal"` in settings (this is the default)
+2. Set `"voice": "personal"` in settings (this is the default)
 
 If Personal Voice isn't available, it falls back to the `fallbackVoice` setting.
 
-## List available voices
+## How it works
 
-```bash
-say -v '?'
-```
-
-## Development
-
-To recompile the Swift binary from source:
-
-```bash
-./build.sh
-```
-
-Requires Xcode Command Line Tools (`xcode-select --install`).
+1. A **Stop hook** fires after every Claude response
+2. The hook extracts the response text, strips markdown, and truncates to `maxChars`
+3. Speech launches in a **detached process** (via `osascript`) so it doesn't block Claude
+4. New responses automatically interrupt any still-playing speech
 
 ## Uninstall
 
-Remove the Stop hook entry from `~/.claude/settings.json`.
+```bash
+claude plugin uninstall claude-personal-speech
+```
