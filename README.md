@@ -11,19 +11,38 @@ A Claude Code plugin that speaks responses aloud using macOS AVSpeechSynthesizer
 ## Install
 
 ```bash
-# Clone or download this directory, then:
-cd claude-personal-speech
+# 1. Clone the repo
+git clone https://github.com/pereljon/Claude-Code-Personal-Speech-Plugin.git
+cd Claude-Code-Personal-Speech-Plugin
+
+# 2. Compile the Swift binary
 ./install.sh
 
-# Install the plugin
-claude plugin install .
+# 3. Add the Stop hook to your Claude Code settings
 ```
 
-## Test without installing
+Add the following to `~/.claude/settings.json` (create the file if it doesn't exist):
 
-```bash
-claude --plugin-dir ./claude-personal-speech
+```json
+{
+  "hooks": {
+    "Stop": [
+      {
+        "hooks": [
+          {
+            "type": "command",
+            "command": "/FULL/PATH/TO/Claude-Code-Personal-Speech-Plugin/scripts/speak.sh"
+          }
+        ]
+      }
+    ]
+  }
+}
 ```
+
+Replace `/FULL/PATH/TO/` with the actual path where you cloned the repo.
+
+If you already have hooks in your settings, add the Stop entry to your existing `"Stop"` array.
 
 ## How it works
 
@@ -56,8 +75,6 @@ Edit `speak-settings.json` to customize:
 | `fallbackVoice` | Fallback voice name | "Samantha" |
 | `maxChars` | Max characters to speak | 500 |
 
-Or use the skill: `/claude-personal-speech:speak-config`
-
 Changes take effect on the next response — no recompile needed.
 
 ## Personal Voice
@@ -70,8 +87,12 @@ To use Personal Voice:
 
 If Personal Voice isn't available, it falls back to the `fallbackVoice` setting.
 
-## Uninstall
+## List available voices
 
 ```bash
-claude plugin uninstall claude-personal-speech
+say -v '?'
 ```
+
+## Uninstall
+
+Remove the Stop hook entry from `~/.claude/settings.json`.
