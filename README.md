@@ -1,1 +1,1 @@
-# Claude-Code-Personal-Speech-Plugin
+# Claude Code Personal Speech Plugin
