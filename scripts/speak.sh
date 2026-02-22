@@ -6,16 +6,21 @@ PLUGIN_ROOT="$(cd "$(dirname "$0")/.." && pwd)"
 
 INPUT=$(cat)
 
-# Parse JSON with osascript (no jq dependency)
-json_get() { osascript -l JavaScript -e "JSON.parse(\`$1\`).$2"; }
+# Parse JSON field via temp file (safe with backticks, quotes, etc.)
+json_field() {
+    local tmpjson=$(mktemp /tmp/claude-json.XXXXXX)
+    echo "$1" > "$tmpjson"
+    osascript -l JavaScript -e "JSON.parse($.NSString.alloc.initWithDataEncoding($.NSData.dataWithContentsOfFile('$tmpjson'), $.NSUTF8StringEncoding).js).$2"
+    rm -f "$tmpjson"
+}
 
-MESSAGE=$(json_get "$INPUT" "last_assistant_message")
+MESSAGE=$(json_field "$INPUT" "last_assistant_message")
 
 # Skip if no message
 [ -z "$MESSAGE" ] || [ "$MESSAGE" = "undefined" ] && exit 0
 
 SETTINGS=$(<"$PLUGIN_ROOT/speak-settings.json")
-MAX_CHARS=$(json_get "$SETTINGS" "maxChars")
+MAX_CHARS=$(json_field "$SETTINGS" "maxChars")
 
 # Truncate long responses
 SHORT=$(echo "$MESSAGE" | head -c "$MAX_CHARS")

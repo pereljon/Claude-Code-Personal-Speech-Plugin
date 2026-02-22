@@ -6,15 +6,20 @@
 PLUGIN_ROOT="$(cd "$(dirname "$0")/.." && pwd)"
 SETTINGS=$(<"$PLUGIN_ROOT/speak-settings.json")
 
-# Parse JSON with osascript (no jq dependency)
-json_get() { osascript -l JavaScript -e "JSON.parse(\`$1\`).$2"; }
+# Parse JSON field via temp file (safe with backticks, quotes, etc.)
+json_field() {
+    local tmpjson=$(mktemp /tmp/claude-json.XXXXXX)
+    echo "$1" > "$tmpjson"
+    osascript -l JavaScript -e "JSON.parse($.NSString.alloc.initWithDataEncoding($.NSData.dataWithContentsOfFile('$tmpjson'), $.NSUTF8StringEncoding).js).$2"
+    rm -f "$tmpjson"
+}
 
 # Read settings and export as env vars for the Swift binary
-export SPEAK_RATE=$(json_get "$SETTINGS" "rate")
-export SPEAK_PITCH=$(json_get "$SETTINGS" "pitch")
-export SPEAK_VOLUME=$(json_get "$SETTINGS" "volume")
-export SPEAK_VOICE=$(json_get "$SETTINGS" "voice")
-export SPEAK_FALLBACK=$(json_get "$SETTINGS" "fallbackVoice")
+export SPEAK_RATE=$(json_field "$SETTINGS" "rate")
+export SPEAK_PITCH=$(json_field "$SETTINGS" "pitch")
+export SPEAK_VOLUME=$(json_field "$SETTINGS" "volume")
+export SPEAK_VOICE=$(json_field "$SETTINGS" "voice")
+export SPEAK_FALLBACK=$(json_field "$SETTINGS" "fallbackVoice")
 
 TMPFILE="$1"
 PIDFILE="/tmp/claude-speak.pid"
