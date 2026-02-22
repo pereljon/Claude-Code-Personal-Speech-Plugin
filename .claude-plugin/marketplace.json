@@ -1,0 +1,20 @@
+{
+  "name": "claude-personal-speech-marketplace",
+  "description": "Claude Code Personal Speech Plugin — speaks responses aloud using macOS Personal Voice",
+  "owner": {
+    "name": "Jonathan Perel"
+  },
+  "plugins": [
+    {
+      "name": "claude-personal-speech",
+      "description": "Speaks Claude Code responses aloud using macOS AVSpeechSynthesizer with Personal Voice support. No dependencies — just macOS on Apple Silicon.",
+      "version": "1.0.0",
+      "author": {
+        "name": "Jonathan Perel"
+      },
+      "source": "./plugins/claude-personal-speech",
+      "category": "productivity",
+      "homepage": "https://github.com/pereljon/Claude-Code-Personal-Speech-Plugin"
+    }
+  ]
+}
