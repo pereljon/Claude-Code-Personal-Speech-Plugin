@@ -4,14 +4,17 @@
 # Kills any previous speech, reads settings, and runs the speech binary.
 
 PLUGIN_ROOT="$(cd "$(dirname "$0")/.." && pwd)"
-SETTINGS="$PLUGIN_ROOT/speak-settings.json"
+SETTINGS=$(<"$PLUGIN_ROOT/speak-settings.json")
+
+# Parse JSON with osascript (no jq dependency)
+json_get() { osascript -l JavaScript -e "JSON.parse(\`$1\`).$2"; }
 
 # Read settings and export as env vars for the Swift binary
-export SPEAK_RATE=$(jq -r '.rate' "$SETTINGS")
-export SPEAK_PITCH=$(jq -r '.pitch' "$SETTINGS")
-export SPEAK_VOLUME=$(jq -r '.volume' "$SETTINGS")
-export SPEAK_VOICE=$(jq -r '.voice' "$SETTINGS")
-export SPEAK_FALLBACK=$(jq -r '.fallbackVoice' "$SETTINGS")
+export SPEAK_RATE=$(json_get "$SETTINGS" "rate")
+export SPEAK_PITCH=$(json_get "$SETTINGS" "pitch")
+export SPEAK_VOLUME=$(json_get "$SETTINGS" "volume")
+export SPEAK_VOICE=$(json_get "$SETTINGS" "voice")
+export SPEAK_FALLBACK=$(json_get "$SETTINGS" "fallbackVoice")
 
 TMPFILE="$1"
 PIDFILE="/tmp/claude-speak.pid"

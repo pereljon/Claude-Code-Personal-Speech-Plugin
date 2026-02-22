@@ -5,13 +5,17 @@
 PLUGIN_ROOT="$(cd "$(dirname "$0")/.." && pwd)"
 
 INPUT=$(cat)
-MESSAGE=$(echo "$INPUT" | jq -r '.last_assistant_message')
+
+# Parse JSON with osascript (no jq dependency)
+json_get() { osascript -l JavaScript -e "JSON.parse(\`$1\`).$2"; }
+
+MESSAGE=$(json_get "$INPUT" "last_assistant_message")
 
 # Skip if no message
-[ -z "$MESSAGE" ] || [ "$MESSAGE" = "null" ] && exit 0
+[ -z "$MESSAGE" ] || [ "$MESSAGE" = "undefined" ] && exit 0
 
-SETTINGS="$PLUGIN_ROOT/speak-settings.json"
-MAX_CHARS=$(jq -r '.maxChars' "$SETTINGS")
+SETTINGS=$(<"$PLUGIN_ROOT/speak-settings.json")
+MAX_CHARS=$(json_get "$SETTINGS" "maxChars")
 
 # Truncate long responses
 SHORT=$(echo "$MESSAGE" | head -c "$MAX_CHARS")

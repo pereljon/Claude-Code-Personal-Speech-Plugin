@@ -5,7 +5,6 @@ A Claude Code plugin that speaks responses aloud using macOS AVSpeechSynthesizer
 ## Requirements
 
 - macOS on Apple Silicon (arm64)
-- `jq` (`brew install jq`)
 
 ## Install
 
