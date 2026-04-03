@@ -14,12 +14,17 @@ json_field() {
     rm -f "$tmpjson"
 }
 
+SETTINGS=$(<"$PLUGIN_ROOT/speak-settings.json")
+
+# Respect enabled flag
+ENABLED=$(json_field "$SETTINGS" "enabled")
+[ "$ENABLED" = "false" ] && exit 0
+
 MESSAGE=$(json_field "$INPUT" "last_assistant_message")
 
 # Skip if no message
 [ -z "$MESSAGE" ] || [ "$MESSAGE" = "undefined" ] && exit 0
 
-SETTINGS=$(<"$PLUGIN_ROOT/speak-settings.json")
 MAX_CHARS=$(json_field "$SETTINGS" "maxChars")
 
 # Truncate long responses
