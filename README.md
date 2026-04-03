@@ -25,6 +25,7 @@ Edit `speak-settings.json` in the plugin directory to customize:
 
 | Setting | Description | Default |
 |---------|-------------|---------|
+| `enabled` | Enable or disable speech without uninstalling | true |
 | `rate` | Speech speed (0.0–1.0) | 0.58 |
 | `pitch` | Voice pitch (0.5–2.0) | 0.9 |
 | `volume` | Volume (0.0–1.0) | 1.0 |
